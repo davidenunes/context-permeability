@@ -43,14 +43,14 @@ public class ModelTest extends TestCase {
 		System.out.println("Test convergence...");
 		CPModel model = new CPModel();
 		Configuration cfg = model.getConfiguration();
-		cfg.setProperty(CPModel.P_MAX_STEPS, 3000);
-		cfg.setProperty(CPModel.P_NUM_AGENTS, 300);
+		cfg.setProperty(CPModel.P_MAX_STEPS, 1000);
+		cfg.setProperty(CPModel.P_NUM_AGENTS, 10);
 		cfg.setProperty(CPModel.P_NUM_NETWORKS, 3);
 
 		String baseNetConfigP = CPModel.P_NETWORK_BASE + ".0";
 		cfg.setProperty(baseNetConfigP, "org.bhave.network.model.KRegularModel");
-		cfg.setProperty(baseNetConfigP + "." + KRegularModel.P_K, 60);
-		cfg.setProperty(baseNetConfigP + "." + KRegularModel.P_NUM_NODES, 300);
+		cfg.setProperty(baseNetConfigP + "." + KRegularModel.P_K, 2);
+		cfg.setProperty(baseNetConfigP + "." + KRegularModel.P_NUM_NODES, 10);
 
 		model.loadConfiguration(cfg);
 

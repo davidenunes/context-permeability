@@ -41,11 +41,11 @@ public class Agent implements Steppable {
 		return true;
 	}
 
-	private int id;
+	protected int id;
 	Logger log;
 
-	int[] memory;
-	int currentOpinion;
+	protected int[] memory;
+	protected int currentOpinion;
 
 	public Agent(int id, ContextPermability env) {
 		this.id = id;
@@ -68,7 +68,6 @@ public class Agent implements Steppable {
 
 	@Override
 	public void step(SimState ss) {
-
 		// access to the agent environment
 		ContextPermability env = (ContextPermability) ss;
 
@@ -87,7 +86,6 @@ public class Agent implements Steppable {
 			if (memory[otherO] > memory[currentOpinion])
 				currentOpinion = otherO;
 		}
-
 	}
 
 	private Agent getRandomNeighbour(ContextPermability env) {

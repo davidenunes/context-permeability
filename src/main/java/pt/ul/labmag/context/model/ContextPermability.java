@@ -6,11 +6,8 @@ import static pt.ul.labmag.context.experiments.CPModel.P_MEASURE_INTERVAL_DEFAUL
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-
-import javax.management.RuntimeErrorException;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -186,6 +183,16 @@ public class ContextPermability extends sim.engine.SimState {
 	 * @return
 	 */
 	private Network createNetwork(int n) {
+		// get a new seed for the generator
+		Configuration modelCfg = netModels[n].getConfiguration();
+		modelCfg.setProperty("seed", this.random.nextLong());
+
+		try {
+			netModels[n].configure(modelCfg);
+		} catch (ConfigurationException e) {
+			log.error("something could be wrong with the network library, configure should not throw an exception here");
+		}
+
 		Network network = netModels[n].generate();
 		return network;
 	}
@@ -196,13 +203,13 @@ public class ContextPermability extends sim.engine.SimState {
 	public static final String P_NETWORK_BASE = "network";
 
 	public static final String P_MAX_STEPS = "max-steps";
-	private static final int P_MAX_STEPS_DEFAULT = 3000;
+	private static final int P_MAX_STEPS_DEFAULT = 2000;
 
 	public static final String P_NUM_NETWORKS = "num-networks";
 	private static final int P_NUM_NETWORKS_DEFAULT = 2;
 
 	public static final String P_NUM_AGENTS = "num-agents";
-	private static final int P_NUM_AGENTS_DEFAULT = 30;
+	private static final int P_NUM_AGENTS_DEFAULT = 10;
 
 	/**
 	 * Creates a default configuration for this simulation model
@@ -334,7 +341,6 @@ public class ContextPermability extends sim.engine.SimState {
 			}
 			netModelCfg.setProperty("numNodes",
 					this.config.getInt(P_NUM_AGENTS));
-			netModelCfg.setProperty("seed", this.random.nextLong());
 
 			model.configure(netModelCfg);
 
@@ -353,6 +359,13 @@ public class ContextPermability extends sim.engine.SimState {
 
 	Injector injector;
 
+	/**
+	 * Loads the default configuration into the model
+	 * 
+	 * @param cfg
+	 *            the configuration to be loaded that overrides any values of
+	 *            the default.
+	 */
 	private void loadDefaultConfiguration(Configuration cfg) {
 		Configuration defaultCfg = defaultConfiguration();
 		this.config = new PropertiesConfiguration();

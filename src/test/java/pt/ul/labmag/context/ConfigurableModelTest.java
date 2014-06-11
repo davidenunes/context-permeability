@@ -100,7 +100,7 @@ public class ConfigurableModelTest extends TestCase {
 	 */
 	public void testRunConfiguredModel() {
 		// test configuration file
-		String filename = TEST_CFG;
+		String filename = "full_cfg_test.cfg";
 		File file = new File(Thread.currentThread().getContextClassLoader()
 				.getResource(filename).getPath().toString());
 		Experiment experiment = Experiment.fromFile(file);

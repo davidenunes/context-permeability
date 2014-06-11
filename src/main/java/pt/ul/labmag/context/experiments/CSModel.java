@@ -10,13 +10,22 @@ import org.bhave.experiment.Model;
 import org.bhave.experiment.data.producer.DataProducer;
 import org.bhave.sweeper.CombinedParameterSweep;
 
-import pt.ul.labmag.context.model.ContextPermability;
+import pt.ul.labmag.context.model.ContextSwitching;
 
 /**
+ * Context Switching Model Wrapper that puts together the model and the
+ * experiment framework.
+ * 
+ * TODO: I should refactor the experiment framework for allow for a easier
+ * integration.
+ * 
+ * Note: the models are packaged with the experiment framework as a front-end.
+ * To run different models, you just need to switch the model class in the
+ * configuration file
  * 
  * @author Davide Nunes
  */
-public class CPModel extends ContextPermability implements Model {
+public class CSModel extends ContextSwitching implements Model {
 	private static final long serialVersionUID = 1L;
 
 	// model log to display info
@@ -24,7 +33,7 @@ public class CPModel extends ContextPermability implements Model {
 
 	protected Map<Integer, DataProducer> producers;
 
-	public CPModel() {
+	public CSModel() {
 		super(System.currentTimeMillis());
 		producers = new HashMap<>();
 		log.setLevel(Level.OFF);
@@ -96,8 +105,6 @@ public class CPModel extends ContextPermability implements Model {
 	 * 
 	 * TODO for future reference I need to refactor this in the next models.
 	 * 
-	 * 
-	 * 
 	 * This is not yet integrated in the experiment framework quite yet. For now
 	 * it is simple enough. If the producers are available you just need to step
 	 * through them and call produce for each one.
@@ -114,7 +121,7 @@ public class CPModel extends ContextPermability implements Model {
 
 	@Override
 	public Model create() {
-		CPModel model = new CPModel();
+		CSModel model = new CSModel();
 		model.loadConfiguration(this.getConfiguration());
 		return model;
 	}
@@ -159,7 +166,6 @@ public class CPModel extends ContextPermability implements Model {
 		boolean withinSteps = schedule.getSteps() < config.getInt(P_MAX_STEPS);
 
 		return !withinSteps;
-
 	}
 
 	/**
@@ -170,7 +176,7 @@ public class CPModel extends ContextPermability implements Model {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 
-		Model model = new CPModel();
+		Model model = new CSModel();
 
 		Thread t = new Thread(model);
 		t.start();
@@ -178,4 +184,5 @@ public class CPModel extends ContextPermability implements Model {
 		t.join();
 		System.exit(0);
 	}
+
 }
