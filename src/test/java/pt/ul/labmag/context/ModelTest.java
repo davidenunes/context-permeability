@@ -11,14 +11,14 @@ import org.junit.Test;
 
 import pt.ul.labmag.context.experiments.CPModel;
 import pt.ul.labmag.context.model.Agent;
-import pt.ul.labmag.context.model.ContextPermability;
+import pt.ul.labmag.context.model.ContextPermeability;
 
 public class ModelTest extends TestCase {
 
 	@Test
 	public void testOpinionDistribution() {
 		System.out.println("Test opinion distribution...");
-		ContextPermability model = new ContextPermability();
+		ContextPermeability model = new ContextPermeability();
 		model.start();
 
 		int opinion1 = 0;

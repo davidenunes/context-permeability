@@ -8,8 +8,8 @@ import org.bhave.experiment.Model;
 import org.bhave.experiment.data.AbstractStatistics;
 import org.bhave.experiment.data.Statistics;
 
-import pt.ul.labmag.context.experiments.CPModel;
-import pt.ul.labmag.context.model.ContextPermability.OpinionMonitor;
+import pt.ul.labmag.context.experiments.ContextModel;
+import pt.ul.labmag.context.model.ContextPermeability.OpinionMonitor;
 
 /**
  * Used to record data about opinion dominance througout the simulation
@@ -20,7 +20,7 @@ public class OpinionDominance extends AbstractStatistics {
 
 	@Override
 	public Properties measure(Model model) {
-		CPModel m = (CPModel) model;
+		ContextModel m = (ContextModel) model;
 		Properties opinions = new Properties();
 
 		OpinionMonitor opMonitor = m.getOpinionMonitor();
@@ -43,7 +43,7 @@ public class OpinionDominance extends AbstractStatistics {
 
 	@Override
 	public Class<? extends Model> getTargetModelClass() {
-		return CPModel.class;
+		return ContextModel.class;
 	}
 
 	// current opinion difference proportion

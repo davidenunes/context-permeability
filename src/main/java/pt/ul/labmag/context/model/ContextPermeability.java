@@ -36,7 +36,7 @@ import com.google.inject.Injector;
  *         TODO re-factor this to integrate the model with the parameterizable
  *         classF
  */
-public class ContextPermability extends sim.engine.SimState {
+public class ContextPermeability extends sim.engine.SimState {
 	private static final long serialVersionUID = 1L;
 	protected Logger log;
 	// attributes
@@ -54,14 +54,14 @@ public class ContextPermability extends sim.engine.SimState {
 	}
 
 	// constructors
-	public ContextPermability(long seed) {
+	public ContextPermeability(long seed) {
 		super(seed);
-		log = Logger.getLogger(ContextPermability.class);
+		log = Logger.getLogger(ContextPermeability.class);
 		log.setLevel(Level.OFF);
 		BasicConfigurator.configure();
 	}
 
-	public ContextPermability() {
+	public ContextPermeability() {
 		this(System.currentTimeMillis());
 	}
 
@@ -84,12 +84,7 @@ public class ContextPermability extends sim.engine.SimState {
 		int numNetworks = (int) config.getProperty(P_NUM_NETWORKS);
 		networks = new Network[numNetworks];
 
-		// create agents
-		for (int i = 0; i < numAgents; i++) {
-			final Agent agent = new Agent(i, this);
-			agents[i] = agent;
-			schedule.scheduleRepeating(Schedule.EPOCH, 1, agent);
-		}
+		createAgents(numAgents);
 
 		// create networks
 		for (int n = 0; n < numNetworks; n++) {
@@ -102,6 +97,19 @@ public class ContextPermability extends sim.engine.SimState {
 		// add the opinion dominance monitoring to the schedule
 		om = new OpinionMonitor(this);
 		schedule.scheduleRepeating(Schedule.EPOCH, 3, om);
+	}
+
+	protected void createAgents(int numAgents) {
+		// create agents
+		for (int i = 0; i < numAgents; i++) {
+			final Agent agent = createAgent(i);
+			agents[i] = agent;
+			schedule.scheduleRepeating(Schedule.EPOCH, 1, agent);
+		}
+	}
+
+	protected Agent createAgent(int id) {
+		return new Agent(id, this);
 	}
 
 	// added to schedule to monitor opinions
@@ -349,8 +357,7 @@ public class ContextPermability extends sim.engine.SimState {
 
 			return null;
 		} catch (ConfigurationException ex) {
-
-			return null;
+			throw new RuntimeException(ex.getMessage());
 		} catch (Exception ex) {
 
 			return null;
@@ -439,7 +446,7 @@ public class ContextPermability extends sim.engine.SimState {
 		// private LinkedList<Long> changeSteps;
 
 		// register whinning opinion +value in the constructor
-		public OpinionMonitor(ContextPermability model) {
+		public OpinionMonitor(ContextPermeability model) {
 			// changeSteps = new LinkedList<>();
 			int[] opinions = model.opinionCount();
 
@@ -456,7 +463,7 @@ public class ContextPermability extends sim.engine.SimState {
 
 		@Override
 		public void step(SimState state) {
-			ContextPermability model = (ContextPermability) state;
+			ContextPermeability model = (ContextPermeability) state;
 			int[] opinions = model.opinionCount();
 
 			int diff = FastMath.abs(opinions[0] - opinions[1]);
@@ -517,5 +524,13 @@ public class ContextPermability extends sim.engine.SimState {
 		// public List<Long> getOpinionChangeSteps() {
 		// return this.changeSteps;
 		// }
+	}
+
+	public Network[] getNetworks() {
+		return networks;
+	}
+
+	public Agent[] getAgents() {
+		return agents;
 	}
 }

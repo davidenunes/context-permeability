@@ -8,17 +8,26 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Level;
 import org.bhave.experiment.Model;
 import org.bhave.experiment.data.producer.DataProducer;
-import org.bhave.network.api.Network;
 import org.bhave.sweeper.CombinedParameterSweep;
 
-import pt.ul.labmag.context.model.Agent;
-import pt.ul.labmag.context.model.ContextPermeability;
+import pt.ul.labmag.context.model.ContextSegregation;
 
 /**
+ * Context Segregation with tolerance-based switching this serves as an adaptor
+ * to use the experiment framework.
+ * 
+ * 
+ * TODO I could create an abstract class that recieves a model and uses forward
+ * method for instance, instead of copying the code. This sould be part of
+ * experiment framework refactoring. I have a problem since using the experiment
+ * framework requires an interface implementation and in this case a class
+ * extension from an existing model in mason.
+ * 
  * 
  * @author Davide Nunes
+ * 
  */
-public class CPModel extends ContextPermeability implements ContextModel {
+public class CTModel extends ContextSegregation implements ContextModel {
 	private static final long serialVersionUID = 1L;
 
 	// model log to display info
@@ -26,7 +35,7 @@ public class CPModel extends ContextPermeability implements ContextModel {
 
 	protected Map<Integer, DataProducer> producers;
 
-	public CPModel() {
+	public CTModel() {
 		super(System.currentTimeMillis());
 		producers = new HashMap<>();
 		log.setLevel(Level.OFF);
@@ -98,8 +107,6 @@ public class CPModel extends ContextPermeability implements ContextModel {
 	 * 
 	 * TODO for future reference I need to refactor this in the next models.
 	 * 
-	 * 
-	 * 
 	 * This is not yet integrated in the experiment framework quite yet. For now
 	 * it is simple enough. If the producers are available you just need to step
 	 * through them and call produce for each one.
@@ -116,7 +123,7 @@ public class CPModel extends ContextPermeability implements ContextModel {
 
 	@Override
 	public Model create() {
-		CPModel model = new CPModel();
+		CTModel model = new CTModel();
 		model.loadConfiguration(this.getConfiguration());
 		return model;
 	}
@@ -161,7 +168,6 @@ public class CPModel extends ContextPermeability implements ContextModel {
 		boolean withinSteps = schedule.getSteps() < config.getInt(P_MAX_STEPS);
 
 		return !withinSteps;
-
 	}
 
 	/**
@@ -172,7 +178,7 @@ public class CPModel extends ContextPermeability implements ContextModel {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 
-		Model model = new CPModel();
+		Model model = new CTModel();
 
 		Thread t = new Thread(model);
 		t.start();
@@ -181,13 +187,4 @@ public class CPModel extends ContextPermeability implements ContextModel {
 		System.exit(0);
 	}
 
-	@Override
-	public Network[] getNetworks() {
-		return networks;
-	}
-
-	@Override
-	public Agent[] getAgents() {
-		return agents;
-	}
 }

@@ -8,7 +8,7 @@ import org.bhave.experiment.Model;
 import org.bhave.experiment.data.posthoc.AbstractPostHocStatistics;
 import org.bhave.experiment.data.posthoc.PostHocStatistics;
 
-import pt.ul.labmag.context.experiments.CPModel;
+import pt.ul.labmag.context.experiments.ContextModel;
 
 /**
  * Returns 1 if the consensus was achieved according to the consensus ration
@@ -26,12 +26,12 @@ public class ConsensusAchieved extends AbstractPostHocStatistics {
 
 	@Override
 	public Class<? extends Model> getTargetModelClass() {
-		return CPModel.class;
+		return ContextModel.class;
 	}
 
 	@Override
 	public List<Properties> measure(Model model) {
-		CPModel m = (CPModel) model;
+		ContextModel m = (ContextModel) model;
 
 		int achieved = m.consensusAchieved() ? 1 : 0;
 		Properties achievedP = new Properties();

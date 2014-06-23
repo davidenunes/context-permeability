@@ -47,7 +47,7 @@ public class Agent implements Steppable {
 	protected int[] memory;
 	protected int currentOpinion;
 
-	public Agent(int id, ContextPermability env) {
+	public Agent(int id, ContextPermeability env) {
 		this.id = id;
 		memory = new int[2];
 		log = Logger.getLogger(Agent.class);
@@ -69,11 +69,23 @@ public class Agent implements Steppable {
 	@Override
 	public void step(SimState ss) {
 		// access to the agent environment
-		ContextPermability env = (ContextPermability) ss;
+		ContextPermeability env = (ContextPermeability) ss;
 
 		Agent partner = getRandomNeighbour(env);
 
-		if (partner != null) {
+		updateOpinions(partner, env);
+	}
+
+	/**
+	 * This can be used as a building block for updating opinions in context
+	 * permeability models
+	 * 
+	 * @param partner
+	 * @param env
+	 */
+	protected void updateOpinions(Agent partner, ContextPermeability env) {
+		// if someone was found
+		if (partner != null && env != null) {
 			env.recordEncounter();
 			int partnerO = partner.getOpinion();
 			memory[partnerO]++;
@@ -88,9 +100,9 @@ public class Agent implements Steppable {
 		}
 	}
 
-	private Agent getRandomNeighbour(ContextPermability env) {
+	protected Agent getRandomNeighbour(ContextPermeability env) {
 		int rndNetwork = env.random.nextInt(env.config
-				.getInt(ContextPermability.P_NUM_NETWORKS));
+				.getInt(ContextPermeability.P_NUM_NETWORKS));
 		Network network = env.networks[rndNetwork];
 
 		log.debug("network link count: " + (network.getLinkCount()));

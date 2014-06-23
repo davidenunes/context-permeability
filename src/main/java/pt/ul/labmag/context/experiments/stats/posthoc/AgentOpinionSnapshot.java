@@ -7,13 +7,12 @@ import java.util.Properties;
 import org.bhave.experiment.Model;
 import org.bhave.experiment.data.posthoc.AbstractPostHocStatistics;
 
-import pt.ul.labmag.context.experiments.CPModel;
+import pt.ul.labmag.context.experiments.ContextModel;
 import pt.ul.labmag.context.model.Agent;
 
 /**
- * This stat reporter is used to export the network structures used on each
- * experiment with this we can later read the network files and analyse the
- * networks with a specialized network analysis package.
+ * This stat reporter is used to export the agent memory values during the
+ * simulation (number of observations for each opinion).
  * 
  * @author Davide Nunes
  * 
@@ -27,7 +26,7 @@ public class AgentOpinionSnapshot extends AbstractPostHocStatistics {
 
 	@Override
 	public Class<? extends Model> getTargetModelClass() {
-		return CPModel.class;
+		return ContextModel.class;
 	}
 
 	private static final String C_AGENT_ID = "agent-id";
@@ -55,9 +54,10 @@ public class AgentOpinionSnapshot extends AbstractPostHocStatistics {
 	public List<Properties> measure(Model model) {
 
 		List<Properties> snapshot = new ArrayList<>();
-		CPModel contextModel = (CPModel) model;
+		ContextModel contextModel = (ContextModel) model;
 
-		for (Agent agent : contextModel.agents) {
+		Agent[] agents = contextModel.getAgents();
+		for (Agent agent : agents) {
 			Properties currAgent = new Properties();
 
 			int[] memory = agent.getOpinionMemory();

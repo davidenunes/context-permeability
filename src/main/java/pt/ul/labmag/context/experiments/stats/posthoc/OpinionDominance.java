@@ -7,8 +7,8 @@ import java.util.Properties;
 import org.bhave.experiment.Model;
 import org.bhave.experiment.data.posthoc.AbstractPostHocStatistics;
 
-import pt.ul.labmag.context.experiments.CPModel;
-import pt.ul.labmag.context.model.ContextPermability.OpinionMonitor;
+import pt.ul.labmag.context.experiments.ContextModel;
+import pt.ul.labmag.context.model.ContextPermeability.OpinionMonitor;
 
 /**
  * This stat reporter is used to export the network structures used on each
@@ -27,7 +27,7 @@ public class OpinionDominance extends AbstractPostHocStatistics {
 
 	@Override
 	public Class<? extends Model> getTargetModelClass() {
-		return CPModel.class;
+		return ContextModel.class;
 	}
 
 	private static final String C_DOMINANT_OPINION = "dominant-opinion";
@@ -56,7 +56,7 @@ public class OpinionDominance extends AbstractPostHocStatistics {
 	public List<Properties> measure(Model model) {
 
 		List<Properties> snapshot = new ArrayList<>();
-		CPModel contextModel = (CPModel) model;
+		ContextModel contextModel = (ContextModel) model;
 
 		OpinionMonitor om = contextModel.getOpinionMonitor();
 		Properties currAgent = new Properties();

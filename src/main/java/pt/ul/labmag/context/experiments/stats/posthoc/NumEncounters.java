@@ -8,8 +8,14 @@ import org.bhave.experiment.Model;
 import org.bhave.experiment.data.posthoc.AbstractPostHocStatistics;
 import org.bhave.experiment.data.posthoc.PostHocStatistics;
 
-import pt.ul.labmag.context.experiments.CPModel;
+import pt.ul.labmag.context.experiments.ContextModel;
 
+/**
+ * Used to export the number of encounters that occurred during a simulation
+ * 
+ * @author Davide Nunes
+ * 
+ */
 public class NumEncounters extends AbstractPostHocStatistics {
 
 	@Override
@@ -19,7 +25,7 @@ public class NumEncounters extends AbstractPostHocStatistics {
 
 	@Override
 	public Class<? extends Model> getTargetModelClass() {
-		return CPModel.class;
+		return ContextModel.class;
 	}
 
 	/**
@@ -31,7 +37,7 @@ public class NumEncounters extends AbstractPostHocStatistics {
 	 */
 	@Override
 	public List<Properties> measure(Model model) {
-		CPModel m = (CPModel) model;
+		ContextModel m = (ContextModel) model;
 
 		List<Properties> stats = new ArrayList<>(1);
 		Properties numEncounters = new Properties();

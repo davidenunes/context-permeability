@@ -40,24 +40,21 @@ public class CSAgent extends Agent {
 		// get a random neighbour (active in the same network)
 		Agent partner = getRandomNeighbour(env);
 
-		// if someone was found
-		if (partner != null) {
-			env.recordEncounter();
-			int partnerO = partner.getOpinion();
-			memory[partnerO]++;
+		updateOpinions(partner, env);
 
-			int otherO = currentOpinion == 0 ? 1 : 0;
+		switchingBehaviour(env);
 
-			// switch opinion value if agent observes more opinions of the
-			// contrary
-			// value
-			if (memory[otherO] > memory[currentOpinion])
-				currentOpinion = otherO;
+	}
 
-		}
-
+	/**
+	 * This implements the context switching behaviour, it can be used as a
+	 * building block to produce more complex agent behaviours.
+	 * 
+	 * @param env
+	 */
+	protected void switchingBehaviour(ContextSwitching env) {
 		// attempt to switch context
-		int numNetwork = env.config.getInt(ContextPermability.P_NUM_NETWORKS);
+		int numNetwork = env.config.getInt(ContextPermeability.P_NUM_NETWORKS);
 		if (numNetwork > 1) {
 			contextSwitching(this, env);
 		}
@@ -80,9 +77,9 @@ public class CSAgent extends Agent {
 	}
 
 	// roullete switching
-	private void switchContext(CSAgent agent, ContextSwitching model) {
+	protected void switchContext(CSAgent agent, ContextSwitching model) {
 		int numNetworks = model.config
-				.getInt(ContextPermability.P_NUM_NETWORKS);
+				.getInt(ContextPermeability.P_NUM_NETWORKS);
 
 		ArrayList<Integer> contexts = new ArrayList<>();
 		for (int i = 0; i < numNetworks; i++) {
@@ -102,7 +99,28 @@ public class CSAgent extends Agent {
 	 *            the simulation model
 	 * @return agent a random neighbour or null if none is available
 	 */
-	private Agent getRandomNeighbour(ContextSwitching model) {
+	protected Agent getRandomNeighbour(ContextSwitching model) {
+
+		ArrayList<Agent> activeNeighbours = getActiveNeighbours(model);
+
+		Agent selected = null;
+		if (activeNeighbours.size() > 0) // select a random neighbour
+		{
+			int r = model.random.nextInt(activeNeighbours.size());
+			selected = activeNeighbours.get(r);
+		}
+
+		return selected;
+	}
+
+	/**
+	 * Return a list of active neighbours (neighbours with the same
+	 * currentNetwork value)
+	 * 
+	 * @param model
+	 * @return a list of active neighbours
+	 */
+	protected ArrayList<Agent> getActiveNeighbours(ContextSwitching model) {
 		Network network = model.networks[this.currentNetwork];
 
 		Node currentNode = network.getNode(this.id);
@@ -117,14 +135,7 @@ public class CSAgent extends Agent {
 				activeNeighbours.add(neighbour);
 			}
 		}
-		Agent selected = null;
-		if (activeNeighbours.size() > 0) // select a random neighbour
-		{
-			int r = model.random.nextInt(activeNeighbours.size());
-			selected = activeNeighbours.get(r);
-		}
-
-		return selected;
+		return activeNeighbours;
 	}
 
 }

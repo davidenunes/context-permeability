@@ -9,7 +9,7 @@ import org.bhave.experiment.data.posthoc.AbstractPostHocStatistics;
 import org.bhave.network.api.Link;
 import org.bhave.network.api.Network;
 
-import pt.ul.labmag.context.experiments.CPModel;
+import pt.ul.labmag.context.experiments.ContextModel;
 
 /**
  * This stat reporter is used to export the network structures used on each
@@ -28,7 +28,7 @@ public class NetworkSnapshot extends AbstractPostHocStatistics {
 
 	@Override
 	public Class<? extends Model> getTargetModelClass() {
-		return CPModel.class;
+		return ContextModel.class;
 	}
 
 	private static final String C_NODE1 = "node1";
@@ -55,10 +55,12 @@ public class NetworkSnapshot extends AbstractPostHocStatistics {
 	public List<Properties> measure(Model model) {
 
 		List<Properties> snapshot = new ArrayList<>();
-		CPModel contextModel = (CPModel) model;
+		ContextModel contextModel = (ContextModel) model;
 
-		for (int l = 0; l < contextModel.networks.length; l++) {
-			Network network = contextModel.networks[l];
+		Network[] networks = contextModel.getNetworks();
+		
+		for (int l = 0; l < networks.length; l++) {
+			Network network = networks[l];
 			for (Link link : network.getLinks()) {
 				Properties edge = new Properties();
 

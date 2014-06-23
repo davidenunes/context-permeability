@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 /**
  * A model of context permeability in multiple social networks with associated
@@ -19,7 +16,7 @@ import org.apache.log4j.Logger;
  * 
  * @author Davide Nunes
  */
-public class ContextSwitching extends ContextPermability {
+public class ContextSwitching extends ContextPermeability {
 	private static final long serialVersionUID = 1L;
 
 	// ADDITIONAL PARAMETERS
@@ -42,6 +39,11 @@ public class ContextSwitching extends ContextPermability {
 
 		// distribute agents randomly and evenly by networks
 		distributeAgents();
+	}
+
+	// overrides the agent creation to create context switching agents
+	protected CSAgent createAgent(int id) {
+		return new CSAgent(id, this);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class ContextSwitching extends ContextPermability {
 	 * @return a string to be used to access this.config and retrieve the proper
 	 *         context switching probability.
 	 */
-	private String getCSPKey(int networkIndex) {
+	public String getCSPKey(int networkIndex) {
 		return P_NETWORK_BASE + "." + networkIndex + "." + P_NETWORK_CS;
 	}
 
@@ -89,21 +91,22 @@ public class ContextSwitching extends ContextPermability {
 			loadConfiguration(defaultConfiguration());
 
 		String pKey = getCSPKey(networkIndex);
-		Double p = config.getDouble(pKey);
-		if (p == null) {
-			if (networkIndex > 0) {
-				pKey = getCSPKey(0);
-				p = config.getDouble(pKey);
+
+		Double p = null;
+		if (!config.containsKey(pKey)) {
+			pKey = getCSPKey(0);
+			if (!config.containsKey(pKey)) {
+				throw new RuntimeException(
+						"Invalid configuration for switching probability:"
+								+ "you must provide at least one value for the parameter ->"
+								+ pKey);
 			}
 		}
-		if (p == null) {
-			throw new RuntimeException(
-					"Invalid configuration for switching probability:"
-							+ "you must provide at least one value for the parameter ->"
-							+ pKey);
-		}
 
-		return 0;
+		// if the key is there we can load the probability
+		p = config.getDouble(pKey);
+
+		return p;
 	}
 
 	@Override
@@ -112,8 +115,9 @@ public class ContextSwitching extends ContextPermability {
 
 		// verify the default value for switching probability
 		String pKey = getCSPKey(0);
-		Double cs = config.getDouble(pKey);
-		if (cs == null) {
+		Double cs = null;
+
+		if (!config.containsKey(pKey)) {
 			throw new RuntimeException(
 					"Invalid configuration for switching probability:"
 							+ "you must provide at least one value for the parameter ->"
@@ -122,10 +126,12 @@ public class ContextSwitching extends ContextPermability {
 
 		// verify that all the others are correct if not null
 		int numNetworks = config.getInt(P_NUM_NETWORKS);
+
 		for (int i = 0; i < numNetworks; i++) {
+			cs = null;
 			pKey = getCSPKey(i);
-			cs = config.getDouble(pKey);
-			if (cs != null) {
+			if (config.containsKey(pKey)) {
+				cs = config.getDouble(pKey);
 				if (cs < 0 || cs > 1.0) {
 					throw new RuntimeException(
 							"Invalid Switching Probability Parameter: " + pKey

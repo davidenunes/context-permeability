@@ -8,13 +8,13 @@ import org.bhave.experiment.Model;
 import org.bhave.experiment.data.AbstractStatistics;
 import org.bhave.experiment.data.Statistics;
 
-import pt.ul.labmag.context.experiments.CPModel;
+import pt.ul.labmag.context.experiments.ContextModel;
 
 public class OpinionCount extends AbstractStatistics {
 
 	@Override
 	public Properties measure(Model model) {
-		CPModel m = (CPModel) model;
+		ContextModel m = (ContextModel) model;
 		Properties opinions = new Properties();
 
 		int[] opCount = m.opinionCount();
@@ -31,7 +31,7 @@ public class OpinionCount extends AbstractStatistics {
 
 	@Override
 	public Class<? extends Model> getTargetModelClass() {
-		return CPModel.class;
+		return ContextModel.class;
 	}
 
 	private static final String P_OP0 = "num-opinion-0";

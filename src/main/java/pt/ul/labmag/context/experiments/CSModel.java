@@ -8,8 +8,10 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Level;
 import org.bhave.experiment.Model;
 import org.bhave.experiment.data.producer.DataProducer;
+import org.bhave.network.api.Network;
 import org.bhave.sweeper.CombinedParameterSweep;
 
+import pt.ul.labmag.context.model.Agent;
 import pt.ul.labmag.context.model.ContextSwitching;
 
 /**
@@ -25,7 +27,7 @@ import pt.ul.labmag.context.model.ContextSwitching;
  * 
  * @author Davide Nunes
  */
-public class CSModel extends ContextSwitching implements Model {
+public class CSModel extends ContextSwitching implements ContextModel {
 	private static final long serialVersionUID = 1L;
 
 	// model log to display info
@@ -183,6 +185,16 @@ public class CSModel extends ContextSwitching implements Model {
 
 		t.join();
 		System.exit(0);
+	}
+
+	@Override
+	public Network[] getNetworks() {
+		return networks;
+	}
+
+	@Override
+	public Agent[] getAgents() {
+		return agents;
 	}
 
 }
