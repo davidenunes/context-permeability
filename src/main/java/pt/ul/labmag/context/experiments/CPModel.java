@@ -67,14 +67,7 @@ public class CPModel extends ContextPermeability implements ContextModel {
 		return run;
 	}
 
-	@Override
-	public Configuration getConfiguration() {
 
-		if (this.config == null) {
-			this.config = defaultConfiguration();
-		}
-		return this.config;
-	}
 
 	final int DATA_PRODUCERS_EPOCH = 4;
 	public static final String P_MEASURE_INTERVAL = "stat-interval";
@@ -105,7 +98,7 @@ public class CPModel extends ContextPermeability implements ContextModel {
 	 * through them and call produce for each one.
 	 * 
 	 * 
-	 * @param repeating
+	 *
 	 */
 	private void scheduleProducers() {
 		for (Integer producerID : producers.keySet()) {

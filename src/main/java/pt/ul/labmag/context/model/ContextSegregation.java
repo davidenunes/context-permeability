@@ -120,7 +120,6 @@ public class ContextSegregation extends ContextSwitching {
 
 		// if the key is there we can load the tolerance
 		p = config.getDouble(pKey);
-
 		return p;
 	}
 

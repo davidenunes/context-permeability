@@ -65,7 +65,7 @@ public class CSAgent extends Agent {
 	 * CONTEXT SWITCHING
 	 *******************************************/
 
-	private void contextSwitching(CSAgent agent, ContextSwitching model) {
+	protected void contextSwitching(CSAgent agent, ContextSwitching model) {
 		// get switching probability for current agent
 		double switchingP = model.getSwitchingProbability(currentNetwork);
 
@@ -81,15 +81,17 @@ public class CSAgent extends Agent {
 		int numNetworks = model.config
 				.getInt(ContextPermeability.P_NUM_NETWORKS);
 
-		ArrayList<Integer> contexts = new ArrayList<>();
-		for (int i = 0; i < numNetworks; i++) {
-			if (i != agent.currentNetwork) {
-				contexts.add(i);
+		if (numNetworks > 1) {
+			ArrayList<Integer> contexts = new ArrayList<>();
+			for (int i = 0; i < numNetworks; i++) {
+				if (i != agent.currentNetwork) {
+					contexts.add(i);
+				}
 			}
-		}
-		int nextContext = model.random.nextInt(numNetworks - 1);
+			int nextContext = model.random.nextInt(numNetworks - 1);
 
-		agent.currentNetwork = contexts.get(nextContext);
+			agent.currentNetwork = contexts.get(nextContext);
+		}
 	}
 
 	/**

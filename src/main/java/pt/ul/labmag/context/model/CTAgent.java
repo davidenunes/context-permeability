@@ -64,10 +64,10 @@ public class CTAgent extends CSAgent {
 		double oppRatio = countOpposites / (activeNeighbours.size() * 1.0);
 
 		// get tolerance for current network
-		double tolerance = env.getContextTolerance(getCurrentNetwork());
+		double tolerance = env.getContextTolerance(this.getCurrentNetwork());
 
 		if (oppRatio > tolerance) {
-			super.switchContext(this, env);
+			switchContext(this, env);
 			return true;
 		}
 

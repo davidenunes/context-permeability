@@ -526,6 +526,14 @@ public class ContextPermeability extends sim.engine.SimState {
 		// }
 	}
 
+    public Configuration getConfiguration() {
+
+        if (this.config == null) {
+            this.config = defaultConfiguration();
+        }
+        return this.config;
+    }
+
 	public Network[] getNetworks() {
 		return networks;
 	}

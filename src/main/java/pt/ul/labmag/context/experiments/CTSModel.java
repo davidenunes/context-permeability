@@ -10,24 +10,9 @@ import org.bhave.experiment.Model;
 import org.bhave.experiment.data.producer.DataProducer;
 import org.bhave.sweeper.CombinedParameterSweep;
 
-import pt.ul.labmag.context.model.ContextSegregation;
+import pt.ul.labmag.context.model.ContextSegregationSelective;
 
-/**
- * Context Segregation with tolerance-based switching this serves as an adaptor
- * to use the experiment framework.
- * 
- * 
- * TODO I could create an abstract class that recieves a model and uses forward
- * method for instance, instead of copying the code. This sould be part of
- * experiment framework refactoring. I have a problem since using the experiment
- * framework requires an interface implementation and in this case a class
- * extension from an existing model in mason.
- * 
- * 
- * @author Davide Nunes
- * 
- */
-public class CTModel extends ContextSegregation implements ContextModel {
+public class CTSModel extends ContextSegregationSelective implements ContextModel{
 	private static final long serialVersionUID = 1L;
 
 	// model log to display info
@@ -35,7 +20,7 @@ public class CTModel extends ContextSegregation implements ContextModel {
 
 	protected Map<Integer, DataProducer> producers;
 
-	public CTModel() {
+	public CTSModel() {
 		super(System.currentTimeMillis());
 		producers = new HashMap<>();
 		log.setLevel(Level.OFF);
@@ -76,7 +61,6 @@ public class CTModel extends ContextSegregation implements ContextModel {
 		return run;
 	}
 
-
 	final int DATA_PRODUCERS_EPOCH = 4;
 	public static final String P_MEASURE_INTERVAL = "stat-interval";
 	public static final int P_MEASURE_INTERVAL_DEFAULT = 1;
@@ -102,9 +86,7 @@ public class CTModel extends ContextSegregation implements ContextModel {
 	 * This is not yet integrated in the experiment framework quite yet. For now
 	 * it is simple enough. If the producers are available you just need to step
 	 * through them and call produce for each one.
-	 * 
-	 * 
-	 * @param repeating
+	 *
 	 */
 	private void scheduleProducers() {
 		for (Integer producerID : producers.keySet()) {
@@ -115,7 +97,7 @@ public class CTModel extends ContextSegregation implements ContextModel {
 
 	@Override
 	public Model create() {
-		CTModel model = new CTModel();
+		CTSModel model = new CTSModel();
 		model.loadConfiguration(this.getConfiguration());
 		return model;
 	}
@@ -170,7 +152,7 @@ public class CTModel extends ContextSegregation implements ContextModel {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 
-		Model model = new CTModel();
+		Model model = new CTSModel();
 
 		Thread t = new Thread(model);
 		t.start();
@@ -178,5 +160,5 @@ public class CTModel extends ContextSegregation implements ContextModel {
 		t.join();
 		System.exit(0);
 	}
-
+	
 }

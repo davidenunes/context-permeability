@@ -88,7 +88,7 @@ public class Agent implements Steppable {
 		if (partner != null && env != null) {
 			env.recordEncounter();
 			int partnerO = partner.getOpinion();
-			memory[partnerO]++;
+			memory[partnerO] = memory[partnerO] + 1;
 
 			int otherO = currentOpinion == 0 ? 1 : 0;
 

@@ -76,14 +76,7 @@ public class CSModel extends ContextSwitching implements ContextModel {
 		return run;
 	}
 
-	@Override
-	public Configuration getConfiguration() {
 
-		if (this.config == null) {
-			this.config = defaultConfiguration();
-		}
-		return this.config;
-	}
 
 	final int DATA_PRODUCERS_EPOCH = 4;
 	public static final String P_MEASURE_INTERVAL = "stat-interval";

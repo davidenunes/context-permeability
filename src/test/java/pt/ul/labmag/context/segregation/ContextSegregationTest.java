@@ -51,7 +51,7 @@ public class ContextSegregationTest extends TestCase {
 
 		assertNotNull(experiment);
 
-		// verify if the experiment has all the components it should
+		// verify if the experiment has all the components		while it should
 		Model model = experiment.getModel();
 
 		// this cast should work
