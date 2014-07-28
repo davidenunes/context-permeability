@@ -11,5 +11,10 @@ You can build this using the terminal or an IDE like eclipse or netbeans. They b
 maven projects. The NetBeans 8.0 supports maven natively. Eclipse needs an aditional [plugin](https://maven.apache.org/eclipse-plugin.html).
 
 
+# Cite this code #
+To cite this code, you can use the following DOI:
+
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.11067.png)](http://dx.doi.org/10.5281/zenodo.11067)
+
 
 
